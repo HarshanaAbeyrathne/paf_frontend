@@ -3,6 +3,10 @@ import Home from "../src/pages/Home"; // <-- Your Home component
 import Login from "../src/pages/Login"; // <-- Your Login component
 import AuthCallback from "./components/AuthCallback";
 
+import CreatePost from './pages/CreatePost';
+import EditPost from './pages/EditPost';
+// import { NavbarDemo } from './components/NavBar';
+
 function App() {
   return (
     <Router>
@@ -13,6 +17,10 @@ function App() {
         <Route path="/auth/success" element={<AuthCallback />} />
         {/* Add other routes as needed */}
         {/* Other routes */}
+
+        <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/edit-post/:postId" element={<EditPost />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
