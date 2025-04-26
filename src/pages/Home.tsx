@@ -7,7 +7,6 @@ import {
   Heart,
   User,
   MessageCircle,
-  Bell,
   Settings,
   Grid,
   BookOpen,
@@ -62,20 +61,20 @@ const posts = [
     }
   ];
   
-  const stories = [
-    { id: 1, username: 'your_story', avatar: '/api/placeholder/60/60', isYours: true },
-    { id: 2, username: 'emma_w', avatar: '/api/placeholder/60/60' },
-    { id: 3, username: 'mike_d', avatar: '/api/placeholder/60/60' },
-    { id: 4, username: 'sara_j', avatar: '/api/placeholder/60/60' },
-    { id: 5, username: 'robert_k', avatar: '/api/placeholder/60/60' },
-    { id: 6, username: 'lisa_m', avatar: '/api/placeholder/60/60' }
-  ];
+  // const stories = [
+  //   { id: 1, username: 'your_story', avatar: '/api/placeholder/60/60', isYours: true },
+  //   { id: 2, username: 'emma_w', avatar: '/api/placeholder/60/60' },
+  //   { id: 3, username: 'mike_d', avatar: '/api/placeholder/60/60' },
+  //   { id: 4, username: 'sara_j', avatar: '/api/placeholder/60/60' },
+  //   { id: 5, username: 'robert_k', avatar: '/api/placeholder/60/60' },
+  //   { id: 6, username: 'lisa_m', avatar: '/api/placeholder/60/60' }
+  // ];
   
-  const suggestions = [
-    { id: 1, name: 'David Wilson', username: 'davidw', avatar: '/api/placeholder/40/40', mutualConnections: 6 },
-    { id: 2, name: 'Sophia Lee', username: 'sophial', avatar: '/api/placeholder/40/40', mutualConnections: 4 },
-    { id: 3, name: 'Michael Brown', username: 'mikeb', avatar: '/api/placeholder/40/40', mutualConnections: 2 }
-  ];
+  // const suggestions = [
+  //   { id: 1, name: 'David Wilson', username: 'davidw', avatar: '/api/placeholder/40/40', mutualConnections: 6 },
+  //   { id: 2, name: 'Sophia Lee', username: 'sophial', avatar: '/api/placeholder/40/40', mutualConnections: 4 },
+  //   { id: 3, name: 'Michael Brown', username: 'mikeb', avatar: '/api/placeholder/40/40', mutualConnections: 2 }
+  // ];
 
 
 
