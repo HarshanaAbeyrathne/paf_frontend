@@ -2,11 +2,16 @@ import { BrowserRouter as Router, Routes, Route, Navigate  } from "react-router-
 import Home from "../src/pages/Home"; // <-- Your Home component
 import Login from "../src/pages/Login"; // <-- Your Login component
 import AuthCallback from "./components/AuthCallback";
-
 import Message from './pages/Message';
+
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
-// import { NavbarDemo } from './components/NavBar';
+import MyLearningJourney from './pages/MyLearningJourney';
+import CreatePlan from './pages/CreatePlan';
+import LearningPlanDetails from './pages/LearningPlanDetails'; 
+
+//------------------learning path------------------
+
 
 function App() {
   return (
@@ -16,7 +21,12 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/auth/success" element={<AuthCallback />} />
-
+        {/* Add other routes as needed */}
+        {/* Other routes */}
+      {/* ⭐ New Route for Learning Journey */}
+        <Route path="/my-learning-journey" element={<MyLearningJourney />} />
+        <Route path="/createplan" element={<CreatePlan />} />
+        <Route path="/learning-plan/:id" element={<LearningPlanDetails />} />
         {/* Add other routes as needed */}
         {/* Other routes */}
         <Route path="/message" element={<Message/>} />
