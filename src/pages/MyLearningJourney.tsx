@@ -56,31 +56,63 @@ const MyLearningJourney: React.FC = () => {
       <main className="flex-1 container mx-auto px-4 py-6 flex">
         {/* Left Sidebar (Navbar) */}
         <Navbar />
-    <div className="min-h-screen bg-blue-50 p-8 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-blue-800">My Learning Journey</h1>
-        <button
-          onClick={handleCreateNewPlan}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          + Create New Plan
-        </button>
-      </div>
+        
+        {/* Main content area */}
+        <div className="flex-1 bg-blue-50">
+          <div className="max-w-7xl mx-auto px-6 py-8">
+            {/* Header section */}
+            <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+              <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div>
+                  <h1 className="text-3xl font-bold text-blue-800">My Learning Journey</h1>
+                  <p className="text-gray-600 mt-2">Track your progress across different learning paths</p>
+                </div>
+                <button
+                  onClick={handleCreateNewPlan}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Create New Plan
+                </button>
+              </div>
+            </div>
 
-      {loading ? (
-        <p className="text-gray-600">Loading plans...</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {plans.length > 0 ? (
-            plans.map((plan) => (
-              <LearningPlanCard key={plan.id} plan={plan} />
-            ))
-          ) : (
-            <p className="text-gray-600">No learning plans created yet.</p>
-          )}
+            {/* Loading state */}
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              </div>
+            ) : (
+              <>
+                {/* Cards grid */}
+                {plans.length > 0 ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                    {plans.map((plan) => (
+                      <div key={plan.id} className="flex justify-center">
+                        <LearningPlanCard plan={plan} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-xl shadow-md p-12 text-center">
+                    <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <p className="text-gray-600 mt-4 text-xl">No learning plans created yet.</p>
+                    <button
+                      onClick={handleCreateNewPlan}
+                      className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700"
+                    >
+                      Get Started
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
-      )}
-    </div>
       </main>
     </div>
   );
