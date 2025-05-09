@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Import the icons
+import { FaEdit, FaTrashAlt, FaBook, FaCalendarAlt, FaLink, FaChevronLeft } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const LearningPlanDetails: React.FC = () => {
@@ -38,9 +38,6 @@ const LearningPlanDetails: React.FC = () => {
   });
 
   const [planName, setPlanName] = useState(''); // Your current plan name
-//const [isEditMode, setIsEditMode] = useState(false); // Already in your code
-
-  // Track the state for edit form visibility
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<any>(null);
 
@@ -83,7 +80,6 @@ const LearningPlanDetails: React.FC = () => {
       }
     });
   };
-  
 
   const handleAddTopic = () => {
     navigate(`/learning-plan/${id}/add-topic`);
@@ -155,61 +151,70 @@ const LearningPlanDetails: React.FC = () => {
       }
     });
   };
-  
-  
 
   return (
-    <div className="min-h-screen bg-blue-50 p-8 max-w-4xl mx-auto">
-      {/* Top Navigation Buttons */}
-      <div className="flex justify-between items-center mb-6">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 p-8 max-w-4xl mx-auto">
+      {/* Header Section */}
+      <div className="mb-8">
         <button
           onClick={handleBack}
-          className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors duration-300 mb-4 group"
         >
-          &larr; Back to Plans
+          <FaChevronLeft className="group-hover:-translate-x-1 transition-transform duration-300" />
+          <span>Back to Plans</span>
         </button>
-        <div className="space-x-4">
-          
-
-          <div className="space-x-4">
-          <button
-  onClick={handleEditPlan}
-  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
->
-  Edit Plan
-</button>
-
-  <button
-    onClick={() => handleDeletePlan()} // We'll create this function below
-    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-  >
-    Delete Plan
-  </button>
-</div>
-
+        
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-indigo-800">{plan.name}</h1>
+          <div className="space-x-3">
+            <button
+              onClick={handleEditPlan}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              Edit Plan
+            </button>
+            <button
+              onClick={handleDeletePlan}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              Delete Plan
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Plan Details */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h1 className="text-2xl font-bold text-blue-800 mb-2">{plan.name}</h1>
-        <p className="text-gray-600 mb-4">Created on: {plan.createdAt}</p>
-        <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
+      {/* Plan Details Card */}
+      <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-indigo-100 hover:shadow-xl transition-shadow duration-300">
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h2 className="text-2xl font-bold text-indigo-800 mb-1">{plan.name}</h2>
+            <p className="text-gray-500 flex items-center gap-2">
+              <FaCalendarAlt className="text-indigo-400" /> Created on: {plan.createdAt}
+            </p>
+          </div>
+          <div className="bg-indigo-100 px-4 py-2 rounded-full">
+            <span className="font-semibold text-indigo-800">{Math.round(plan.progress)}% Complete</span>
+          </div>
+        </div>
+        
+        <div className="w-full bg-gray-200 rounded-full h-4">
           <div
-            className="bg-blue-600 h-4 rounded-full"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all duration-700 ease-in-out"
             style={{ width: `${plan.progress}%` }}
           ></div>
         </div>
       </div>
 
       {/* Learning Topics Section */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-blue-800">Learning Topics</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-indigo-800 flex items-center gap-2">
+          <FaBook className="text-indigo-600" /> Learning Topics
+        </h2>
         <button
           onClick={handleAddTopic}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
         >
-          + Add Topic
+          <span>Add Topic</span> <span className="text-xl">+</span>
         </button>
       </div>
 
@@ -217,116 +222,140 @@ const LearningPlanDetails: React.FC = () => {
       <div className="space-y-4">
         {plan.topics.length > 0 ? (
           plan.topics.map((topic, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-4">
+            <div 
+              key={index} 
+              className="bg-white rounded-xl shadow-md p-5 border-l-4 border-indigo-500 hover:shadow-lg hover:translate-x-1 hover:-translate-y-1 transition-all duration-300"
+            >
               <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={topic.isChecked}
-                  onChange={() => handleCheckboxChange(index)}
-                  className="mr-4"
-                />
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={topic.isChecked}
+                    onChange={() => handleCheckboxChange(index)}
+                    className="w-5 h-5 accent-indigo-600 cursor-pointer"
+                  />
+                </div>
                 <h3
-                  className={`text-lg font-bold text-blue-700 mb-1 ${topic.isChecked ? 'line-through text-gray-500' : ''}`}
+                  className={`text-lg font-bold ml-3 ${
+                    topic.isChecked ? 'line-through text-gray-500' : 'text-indigo-700'
+                  } transition-colors duration-300`}
                 >
                   {topic.title}
                 </h3>
                 {/* Edit and Delete Icons */}
-                <div className="ml-auto flex space-x-2">
-                  <button onClick={() => handleEdit(index)} className="text-blue-500 hover:text-blue-700">
+                <div className="ml-auto flex space-x-3">
+                  <button 
+                    onClick={() => handleEdit(index)} 
+                    className="text-blue-500 hover:text-blue-700 hover:scale-110 transition-transform duration-300"
+                    title="Edit Topic"
+                  >
                     <FaEdit size={18} />
                   </button>
-                  <button onClick={() => handleDelete(index)} className="text-red-500 hover:text-red-700">
+                  <button 
+                    onClick={() => handleDelete(index)} 
+                    className="text-red-500 hover:text-red-700 hover:scale-110 transition-transform duration-300"
+                    title="Delete Topic"
+                  >
                     <FaTrashAlt size={18} />
                   </button>
                 </div>
               </div>
-              <p className="text-gray-700 mb-2">{topic.description}</p>
-              <p className="text-gray-500 text-sm mb-1">Target Date: {topic.targetDate}</p>
-              <a
-                href={topic.resourceLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline text-sm"
-              >
-                View Resource
-              </a>
+              
+              <div className="mt-3 pl-8">
+                <p className="text-gray-700 mb-3">{topic.description}</p>
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <div className="flex items-center gap-1 text-gray-600">
+                    <FaCalendarAlt className="text-indigo-400" /> 
+                    <span>Target: {topic.targetDate}</span>
+                  </div>
+                  <a
+                    href={topic.resourceLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-300"
+                  >
+                    <FaLink className="text-blue-500" /> View Resource
+                  </a>
+                </div>
+              </div>
             </div>
           ))
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-6 text-center text-gray-500">
-            No topics added yet.
+          <div className="bg-white rounded-xl shadow-md p-8 text-center text-gray-500 border border-dashed border-gray-300">
+            <p className="text-lg">No topics added yet.</p>
+            <p className="mt-2">Click "Add Topic" to get started on your learning journey!</p>
           </div>
         )}
       </div>
 
       {/* Edit Topic Modal */}
       {isEditMode && (
-  <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
-    <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-      <h3 className="text-xl font-semibold text-blue-800 mb-4">Edit Topic</h3>
+        <div className="fixed inset-0 bg-black/50 backdrop-filter backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-xl shadow-2xl w-96 max-w-md border border-indigo-100 animate-fadeIn">
+            <h3 className="text-xl font-bold text-indigo-800 mb-5 border-b pb-3">Edit Topic</h3>
 
-      {/* Title */}
-      <div className="mb-4">
-        <label className="block text-gray-600">Title</label>
-        <input
-          type="text"
-          value={selectedTopic?.title}
-          onChange={(e) => handleChange(e, 'title')}
-          className="w-full p-2 border rounded mt-2"
-        />
-      </div>
+            {/* Title */}
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-1">Title</label>
+              <input
+                type="text"
+                value={selectedTopic?.title}
+                onChange={(e) => handleChange(e, 'title')}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+              />
+            </div>
 
-      {/* Description */}
-      <div className="mb-4">
-        <label className="block text-gray-600">Description</label>
-        <textarea
-          value={selectedTopic?.description}
-          onChange={(e) => handleChange(e, 'description')}
-          className="w-full p-2 border rounded mt-2"
-        />
-      </div>
+            {/* Description */}
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-1">Description</label>
+              <textarea
+                value={selectedTopic?.description}
+                onChange={(e) => handleChange(e, 'description')}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                rows={3}
+              />
+            </div>
 
-      {/* Target Date */}
-      <div className="mb-4">
-        <label className="block text-gray-600">Target Date</label>
-        <input
-          type="date"
-          value={selectedTopic?.targetDate}
-          onChange={(e) => handleChange(e, 'targetDate')}
-          className="w-full p-2 border rounded mt-2"
-        />
-      </div>
+            {/* Target Date */}
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-1">Target Date</label>
+              <input
+                type="date"
+                value={selectedTopic?.targetDate}
+                onChange={(e) => handleChange(e, 'targetDate')}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+              />
+            </div>
 
-      {/* Resource URL */}
-      <div className="mb-4">
-        <label className="block text-gray-600">Resource URL</label>
-        <input
-          type="text"
-          value={selectedTopic?.resourceLink}
-          onChange={(e) => handleChange(e, 'resourceUrl')}
-          className="w-full p-2 border rounded mt-2"
-        />
-      </div>
+            {/* Resource URL */}
+            <div className="mb-5">
+              <label className="block text-gray-700 font-medium mb-1">Resource URL</label>
+              <input
+                type="text"
+                value={selectedTopic?.resourceLink}
+                onChange={(e) => handleChange(e, 'resourceLink')}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+              />
+            </div>
 
-      {/* Buttons */}
-      <div className="flex justify-end">
-        <button
-          onClick={handleSaveChanges}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Save Changes
-        </button>
-        <button
-          onClick={() => setIsEditMode(false)}
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 ml-2"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+            {/* Buttons */}
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                onClick={() => setIsEditMode(false)}
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveChanges}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
