@@ -37,6 +37,9 @@ const LearningPlanDetails: React.FC = () => {
     ],
   });
 
+  const [planName, setPlanName] = useState(''); // Your current plan name
+//const [isEditMode, setIsEditMode] = useState(false); // Already in your code
+
   // Track the state for edit form visibility
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<any>(null);
@@ -111,6 +114,50 @@ const LearningPlanDetails: React.FC = () => {
     });
   };
 
+  const handleDeletePlan = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This will delete the entire plan!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Logic to delete the plan (currently just navigate back)
+        Swal.fire('Deleted!', 'The learning plan has been deleted.', 'success');
+        navigate('/my-learning-journey');
+      }
+    });
+  };
+
+  const handleEditPlan = () => {
+    Swal.fire({
+      title: 'Edit Plan Name',
+      input: 'text',
+      inputLabel: 'New Plan Name',
+      inputPlaceholder: 'Enter new plan name',
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      cancelButtonText: 'Cancel',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Plan name cannot be empty!';
+        }
+      },
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        // Update the plan name here
+        setPlanName(result.value);
+        setIsEditMode(true);
+        Swal.fire('Saved!', 'Your plan name has been updated.', 'success');
+      }
+    });
+  };
+  
+  
+
   return (
     <div className="min-h-screen bg-blue-50 p-8 max-w-4xl mx-auto">
       {/* Top Navigation Buttons */}
@@ -122,12 +169,24 @@ const LearningPlanDetails: React.FC = () => {
           &larr; Back to Plans
         </button>
         <div className="space-x-4">
+          
+
+          <div className="space-x-4">
           <button
-            onClick={() => setIsEditMode(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Edit Plan
-          </button>
+  onClick={handleEditPlan}
+  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+>
+  Edit Plan
+</button>
+
+  <button
+    onClick={() => handleDeletePlan()} // We'll create this function below
+    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+  >
+    Delete Plan
+  </button>
+</div>
+
         </div>
       </div>
 

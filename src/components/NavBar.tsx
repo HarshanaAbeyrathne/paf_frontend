@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Home, Users, BookOpen, Grid, Bookmark, Settings, MessageSquare
+  Home, Users, BookOpen, Grid, Bookmark, Settings, MessageSquare, NotebookPen 
 } from 'lucide-react';
 
 const Navbar: React.FC = () => {
@@ -43,6 +43,10 @@ const Navbar: React.FC = () => {
           <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <Bookmark size={20} />
             <span>Saved</span>
+          </a>
+          <a href="/my-learning-journey" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
+            <NotebookPen  size={20} />
+            <span>Learning Journey</span>
           </a>
           <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <Settings size={20} />
