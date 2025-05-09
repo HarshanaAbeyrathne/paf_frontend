@@ -1,16 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // import navigate
 
 interface LearningPlanProps {
   plan: {
     id: number;
     name: string;
-    createdAt: string; // added created date
-    progress: number;  // added progress bar
-    topicsCount: number; // added number of topics
+    createdAt: string; // created date
+    progress: number;  // progress percentage
+    topicsCount: number; // number of topics
   };
 }
 
 const LearningPlanCard: React.FC<LearningPlanProps> = ({ plan }) => {
+  const navigate = useNavigate(); // initialize navigate
+
+  const handleViewDetails = () => {
+    navigate(`/learning-plan/${plan.id}`); // navigate to plan details
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 w-64">
       <h2 className="text-blue-600 font-bold text-xl mb-2">{plan.name}</h2>
@@ -27,7 +34,10 @@ const LearningPlanCard: React.FC<LearningPlanProps> = ({ plan }) => {
 
       <p className="text-gray-600 text-sm mb-4">Topics: {plan.topicsCount}</p>
 
-      <button className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+      <button
+        onClick={handleViewDetails} // add the handler
+        className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+      >
         View Details
       </button>
     </div>

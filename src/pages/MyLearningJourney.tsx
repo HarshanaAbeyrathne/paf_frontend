@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LearningPlanCard from '../components/LearningPlanCard';
+import Navbar from '../components/NavBar';
 
 interface LearningPath {
   id: number;
@@ -50,6 +51,11 @@ const MyLearningJourney: React.FC = () => {
   };
 
   return (
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Main content */}
+      <main className="flex-1 container mx-auto px-4 py-6 flex">
+        {/* Left Sidebar (Navbar) */}
+        <Navbar />
     <div className="min-h-screen bg-blue-50 p-8 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-blue-800">My Learning Journey</h1>
@@ -74,6 +80,8 @@ const MyLearningJourney: React.FC = () => {
           )}
         </div>
       )}
+    </div>
+      </main>
     </div>
   );
 };
