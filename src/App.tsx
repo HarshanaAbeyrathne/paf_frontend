@@ -9,6 +9,7 @@ import EditPost from './pages/EditPost';
 import MyLearningJourney from './pages/MyLearningJourney';
 import CreatePlan from './pages/CreatePlan';
 import LearningPlanDetails from './pages/LearningPlanDetails'; 
+import AddLearningTopic from './pages/AddLearningTopic'; 
 
 //------------------learning path------------------
 
@@ -27,6 +28,11 @@ function App() {
         <Route path="/my-learning-journey" element={<MyLearningJourney />} />
         <Route path="/createplan" element={<CreatePlan />} />
         <Route path="/learning-plan/:id" element={<LearningPlanDetails />} />
+        <Route path="/learning-plan/:id/add-topic" element={<AddLearningTopic />} />
+
+
+
+
         {/* Add other routes as needed */}
         {/* Other routes */}
         <Route path="/message" element={<Message/>} />
