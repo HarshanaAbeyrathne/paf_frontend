@@ -5,6 +5,7 @@ import AuthCallback from "./components/AuthCallback";
 
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
+import SocialPost from "./components/LikeComment";
 // import { NavbarDemo } from './components/NavBar';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/edit-post/:postId" element={<EditPost />} />
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/likeComment" element={<SocialPost />} />
       </Routes>
     </Router>
   );
