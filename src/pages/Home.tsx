@@ -3,9 +3,9 @@ import {
   Home, Search, PlusSquare, Heart, User 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { PostCard } from '../components/PostCard';
 import postService, { Post } from '../services/PostService';
 import Navbar from '../components/NavBar'; // Import the Navbar component
+import LikeComment from '../components/LikeComment'; // Import the LikeComment component
 
 const HomePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'feed' | 'explore'>('feed');
@@ -59,7 +59,6 @@ const HomePage: React.FC = () => {
 
         {/* Main feed */}
         <div className="flex-1 max-w-2xl mx-auto">
-          {/* Create Post Button */}
           <div className="mb-4">
             <button 
               onClick={() => navigate('/create-post')}
@@ -130,6 +129,19 @@ const HomePage: React.FC = () => {
               /> */}
             
           </div>
+
+          {posts.map(post => (
+  <LikeComment 
+    key={post.postId}
+    postId={post.postId}
+    postType={post.postType}
+    description={post.description}
+    createdAt={post.createdAt}
+    contents={post.contents}
+  />
+))}
+
+
         </div>
 
         {/* Right sidebar */}

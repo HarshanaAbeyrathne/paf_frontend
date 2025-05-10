@@ -64,7 +64,7 @@ const CreatePost: React.FC = () => {
       previews.forEach(preview => URL.revokeObjectURL(preview));
       
       // Redirect to home page
-      navigate('/');
+      navigate('/home');
     } catch (err: any) {
       setError(err.response?.data || 'Failed to create post. Please try again.');
       console.error('Error creating post:', err);
