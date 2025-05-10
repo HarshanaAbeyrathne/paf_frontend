@@ -6,14 +6,15 @@ import Chat from "./pages/Chat"; // Add import for Chat page
 
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
+import SocialPost from "./components/LikeComment";
+// import { NavbarDemo } from './components/NavBar';
 import Message from './pages/Message';
-
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
 import MyLearningJourney from './pages/MyLearningJourney';
 import CreatePlan from './pages/CreatePlan';
 import LearningPlanDetails from './pages/LearningPlanDetails'; 
-import AddLearningTopic from './pages/AddLearningTopic'; 
+import AddLearningTopic from './pages/AddLearningTopic';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/edit-post/:postId" element={<EditPost />} />
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/likeComment" element={<SocialPost />} />
       </Routes>
     </Router>
   );
