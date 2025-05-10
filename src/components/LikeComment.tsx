@@ -19,19 +19,22 @@ interface PostProps {
   description: string;
   createdAt: string;
   contents: Content[];
+  comments: Comment[];
 }
 
 interface Comment {
   id: number;
+  userName: string;
   username: string;
   text: string;
+  content: string
   likes: number;
 }
 
-const LikeComment = ({ postId, postType, description, createdAt, contents }: PostProps) => {
+const LikeComment = ({ postId, postType, description, createdAt, contents, comments }: PostProps) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0); 
-  const [comments, setComments] = useState<Comment[]>([]);
+  //const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
   const [showComments, setShowComments] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -87,6 +90,22 @@ const LikeComment = ({ postId, postType, description, createdAt, contents }: Pos
     }
   };
 
+  const handlePostDelete = async () => {
+    try {
+      const response = await axiosInstance.delete(`/posts/${postId}`);
+      if (response.status === 200) {
+        // Handle successful deletion (e.g., redirect or show a message)
+        alert('Post deleted successfully');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post. Please try again.');
+    }
+  }
+
+  const handleEditPost = () => {
+
+  }
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') handleCommentSubmit();
   };
@@ -99,7 +118,14 @@ const LikeComment = ({ postId, postType, description, createdAt, contents }: Pos
           <h3 className="font-semibold">Post Type: {postType}</h3>
           <p className="text-gray-500 text-xs">Posted on {new Date(createdAt).toLocaleString()}</p>
         </div>
-        <MoreHorizontal size={20} className="text-gray-500" />
+        <button className="text-gray-500 hover:text-gray-700">
+          Edit
+        </button>
+        <button className="text-gray-500 hover:text-gray-700" onClick={handlePostDelete}>
+          Delete
+        </button>
+
+        
       </div>
 
       {/* Description */}
@@ -139,8 +165,8 @@ const LikeComment = ({ postId, postType, description, createdAt, contents }: Pos
             <div key={comment.id} className="flex space-x-3 mb-3">
               <div className="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0"></div>
               <div className="bg-gray-100 rounded-lg p-2 flex-1">
-                <p className="font-semibold text-sm">@{comment.username}</p>
-                <p className="text-sm">{comment.text}</p>
+                <p className="font-semibold text-sm">@{comment.username || comment.userName}</p>
+                <p className="text-sm">{comment.content || comment.text}</p>
               </div>
             </div>
           ))}

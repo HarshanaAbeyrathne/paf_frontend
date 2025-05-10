@@ -94,6 +94,7 @@ const HomePage: React.FC = () => {
               description={post.description}
               createdAt={post.createdAt}
               contents={post.contents}
+              comments={post.comments}
             />
           ))}
 
