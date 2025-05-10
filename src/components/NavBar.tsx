@@ -24,10 +24,10 @@ const Navbar: React.FC = () => {
             <Home size={20} />
             <span className="font-medium">Home</span>
           </a>
-          <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
+          {/* <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <Users size={20} />
             <span>Friends</span>
-          </a>
+          </a> */}
           <a href="/chat" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <MessageSquare size={20} />
             <span>Message</span>
@@ -36,14 +36,14 @@ const Navbar: React.FC = () => {
             <BookOpen size={20} />
             <span>Create Post</span>
           </a>
-          <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
+          {/* <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <Grid size={20} />
             <span>Explore</span>
-          </a>
-          <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
+          </a> */}
+          {/* <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <Bookmark size={20} />
             <span>Saved</span>
-          </a>
+          </a> */}
           <a href="/my-learning-journey" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <NotebookPen  size={20} />
             <span>Learning Journey</span>

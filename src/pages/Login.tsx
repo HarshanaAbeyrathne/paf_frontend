@@ -51,6 +51,7 @@ const Login: React.FC = () => {
       
       // Store token in localStorage
       localStorage.setItem('accessToken', response.data.accessToken);
+      localStorage.setItem('name', response.data.name);
       
       // Redirect to dashboard or home page
       navigate('/home');

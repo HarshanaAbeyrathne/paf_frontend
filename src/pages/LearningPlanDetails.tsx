@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaEdit, FaTrashAlt, FaBook, FaCalendarAlt, FaLink, FaChevronLeft } from 'react-icons/fa';
+import { FaTrashAlt, FaBook, FaCalendarAlt, FaLink, FaChevronLeft } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import axiosInstance from '../lib/axiosInstance';
 import axios from 'axios';
@@ -23,7 +23,16 @@ const LearningPlanDetails: React.FC = () => {
   const { id } = useParams(); // Get the plan id from URL
 
   // Dummy plan details for now
-  const [plan, setPlan] = useState<planInterface>({});
+  const [plan, setPlan] = useState<planInterface>({
+    id: 0,
+    name: '',
+    tag: null,
+    completedCount: 0,
+    totalContentCount: 0,
+    contents: [],
+    userId: 0,
+    userName: '',
+  });
 
   const [planName, setPlanName] = useState(''); // Your current plan name
   const [isEditMode, setIsEditMode] = useState(false);
