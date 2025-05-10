@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaTrashAlt, FaBook, FaCalendarAlt, FaLink, FaChevronLeft } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import axiosInstance from '../lib/axiosInstance';
+import axios from 'axios';
 
 
 interface planInterface {
@@ -42,6 +43,7 @@ const LearningPlanDetails: React.FC = () => {
       const response = await axiosInstance.get(`/learning-paths/${id}`);
       if(response.data){
         console.log(response.data);
+        console.log(response.data?.contents);
         setPlan(response.data);
         setPlanName(response.data?.name);
       }
@@ -53,6 +55,7 @@ const LearningPlanDetails: React.FC = () => {
     if (!plan.contents || plan.contents.length === 0)  return;
     const completedTopics = plan.contents.filter((topic) => topic.isChecked).length;
     const newProgress = (completedTopics / plan.contents.length) * 100;
+    // console.log();
     setPlan((prevPlan) => ({
       ...prevPlan,
       progress: newProgress,
@@ -130,6 +133,7 @@ const LearningPlanDetails: React.FC = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
+        axiosInstance.delete(`/learning-paths/${id}`);
         // Logic to delete the plan (currently just navigate back)
         Swal.fire('Deleted!', 'The learning plan has been deleted.', 'success');
         navigate('/my-learning-journey');
@@ -151,11 +155,13 @@ const LearningPlanDetails: React.FC = () => {
           return 'Plan name cannot be empty!';
         }
       },
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed && result.value) {
+        await axiosInstance.put(`/learning-paths/${id}`, { name: result.value })
         // Update the plan name here
         setPlanName(result.value);
-        setIsEditMode(true);
+        window.location.reload();
+        // setIsEditMode(true);
         Swal.fire('Saved!', 'Your plan name has been updated.', 'success');
       }
     });
@@ -207,10 +213,10 @@ const LearningPlanDetails: React.FC = () => {
         </div>
         
         <div className="w-full bg-gray-200 rounded-full h-4">
-          <div
+          {/* <div
             className="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all duration-700 ease-in-out"
             style={{ width: `${plan.completedCount}%` }}
-          ></div>
+          ></div> */}
         </div>
       </div>
 
@@ -249,7 +255,7 @@ const LearningPlanDetails: React.FC = () => {
                     topic.isChecked ? 'line-through text-gray-500' : 'text-indigo-700'
                   } transition-colors duration-300`}
                 >
-                  {topic.title}
+                  {topic.contentTitle}
                 </h3>
                 {/* Edit and Delete Icons */}
                 <div className="ml-auto flex space-x-3">
@@ -278,7 +284,7 @@ const LearningPlanDetails: React.FC = () => {
                     <span>Target: {topic.targetDate}</span>
                   </div>
                   <a
-                    href={topic.resourceLink}
+                    href={topic.contentUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-300"
