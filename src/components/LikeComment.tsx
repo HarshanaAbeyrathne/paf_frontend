@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send } from 'lucide-react';
+import axiosInstance from '../lib/axiosInstance';
 
 interface Content {
   id: number;
@@ -15,29 +16,74 @@ interface Content {
 interface PostProps {
   postId: number;
   postType: string;
-
   description: string;
   createdAt: string;
   contents: Content[];
 }
 
+interface Comment {
+  id: number;
+  username: string;
+  text: string;
+  likes: number;
+}
+
 const LikeComment = ({ postId, postType, description, createdAt, contents }: PostProps) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0); 
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
   const [showComments, setShowComments] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLike = () => {
     setLikeCount(prev => liked ? prev - 1 : prev + 1);
     setLiked(!liked);
   };
 
-  const handleCommentSubmit = () => {
-    if (commentText.trim()) {
-      const newComment = { id: comments.length + 1, username: 'CurrentUser', text: commentText, likes: 0 };
-      setComments([...comments, newComment]);
-      setCommentText('');
+  const submitCommentToAPI = async (content: string) => {
+    try {
+      setIsSubmitting(true);
+      const response = await axiosInstance.post('/comments', {
+        postId,
+        content,
+      });
+      
+      if (response.status != 201) {
+        throw new Error('Failed to submit comment');
+      }
+      
+      const {data} = response
+      return data;
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCommentSubmit = async () => {
+    if (commentText.trim() && !isSubmitting) {
+      try {
+        // Submit to API
+        let data = await submitCommentToAPI(commentText);
+        
+        
+        // Update local state (optimistic update)
+        const newComment = { 
+          id: comments.length + 1, 
+          username: 'CurrentUser', 
+          text: commentText, 
+          likes: 0 
+        };
+        
+        setComments([...comments, newComment]);
+        setCommentText('');
+      } catch (error) {
+        // Handle error - could show an error message to user
+        alert('Failed to post comment. Please try again.');
+      }
     }
   };
 
@@ -108,8 +154,13 @@ const LikeComment = ({ postId, postType, description, createdAt, contents }: Pos
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               onKeyPress={handleKeyPress}
+              disabled={isSubmitting}
             />
-            <button onClick={handleCommentSubmit} className="text-blue-600">
+            <button 
+              onClick={handleCommentSubmit} 
+              className={`text-blue-600 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isSubmitting}
+            >
               <Send size={16} />
             </button>
           </div>
