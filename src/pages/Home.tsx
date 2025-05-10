@@ -30,6 +30,7 @@ const HomePage: React.FC = () => {
         setLoading(true);
         const fetchedPosts = await postService.getAllPosts();
         setPosts(fetchedPosts);
+        console.log('Fetched posts:', fetchedPosts);
         setError(null);
       } catch (err) {
         setError('Failed to load posts. Please try again later.');
@@ -157,7 +158,15 @@ const HomePage: React.FC = () => {
               </div>
             )}
             
-            {!loading && !error && posts.map(post => (
+            {
+              !loading && !error && posts.length === 0 && (
+                <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+                  <p className="text-gray-500">No posts found. Create a new post!</p>
+                </div>
+              )
+            }
+
+            {/* {!loading && !error && posts.length > 0 && posts.map(post => (
               <PostCard
                 key={post.postId}
                 id={post.postId}
@@ -175,7 +184,7 @@ const HomePage: React.FC = () => {
                 onEdit={handleEditPost}
                 onDelete={handleDeletePost}
               />
-            ))}
+            ))} */}
           </div>
         </div>
         
