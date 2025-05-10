@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
         setLoading(true);
         const fetchedPosts = await postService.getAllPosts();
         setPosts(fetchedPosts);
-        console.log('Fetched posts:', fetchedPosts);
+        // console.log('Fetched posts:', fetchedPosts);
         setError(null);
       } catch (err) {
         setError('Failed to load posts. Please try again later.');
@@ -131,15 +131,16 @@ const HomePage: React.FC = () => {
           </div>
 
           {posts.map(post => (
-  <LikeComment 
-    key={post.postId}
-    postId={post.postId}
-    postType={post.postType}
-    description={post.description}
-    createdAt={post.createdAt}
-    contents={post.contents}
-  />
-))}
+            <LikeComment 
+              key={post.postId}
+              postId={post.postId}
+              postType={post.postType}
+              description={post.description}
+              createdAt={post.createdAt}
+              contents={post.contents}
+              comments={post.comments}
+            />
+          ))}
 
 
         </div>

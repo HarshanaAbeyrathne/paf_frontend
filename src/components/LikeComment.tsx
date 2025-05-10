@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send } from 'lucide-react';
+import axiosInstance from '../lib/axiosInstance';
 
 interface Content {
   id: number;
@@ -15,32 +16,96 @@ interface Content {
 interface PostProps {
   postId: number;
   postType: string;
-
   description: string;
   createdAt: string;
   contents: Content[];
+  comments: Comment[];
 }
 
-const LikeComment = ({ postId, postType, description, createdAt, contents }: PostProps) => {
+interface Comment {
+  id: number;
+  userName: string;
+  username: string;
+  text: string;
+  content: string
+  likes: number;
+}
+
+const LikeComment = ({ postId, postType, description, createdAt, contents, comments }: PostProps) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0); 
-  const [comments, setComments] = useState<any[]>([]);
+  //const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
   const [showComments, setShowComments] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLike = () => {
     setLikeCount(prev => liked ? prev - 1 : prev + 1);
     setLiked(!liked);
   };
 
-  const handleCommentSubmit = () => {
-    if (commentText.trim()) {
-      const newComment = { id: comments.length + 1, username: 'CurrentUser', text: commentText, likes: 0 };
-      setComments([...comments, newComment]);
-      setCommentText('');
+  const submitCommentToAPI = async (content: string) => {
+    try {
+      setIsSubmitting(true);
+      const response = await axiosInstance.post('/comments', {
+        postId,
+        content,
+      });
+      
+      if (response.status != 201) {
+        throw new Error('Failed to submit comment');
+      }
+      
+      const {data} = response
+      return data;
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  const handleCommentSubmit = async () => {
+    if (commentText.trim() && !isSubmitting) {
+      try {
+        // Submit to API
+        let data = await submitCommentToAPI(commentText);
+        
+        
+        // Update local state (optimistic update)
+        const newComment = { 
+          id: comments.length + 1, 
+          username: 'CurrentUser', 
+          text: commentText, 
+          likes: 0 
+        };
+        
+        setComments([...comments, newComment]);
+        setCommentText('');
+      } catch (error) {
+        // Handle error - could show an error message to user
+        alert('Failed to post comment. Please try again.');
+      }
+    }
+  };
+
+  const handlePostDelete = async () => {
+    try {
+      const response = await axiosInstance.delete(`/posts/${postId}`);
+      if (response.status === 200) {
+        // Handle successful deletion (e.g., redirect or show a message)
+        alert('Post deleted successfully');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post. Please try again.');
+    }
+  }
+
+  const handleEditPost = () => {
+
+  }
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') handleCommentSubmit();
   };
@@ -53,7 +118,14 @@ const LikeComment = ({ postId, postType, description, createdAt, contents }: Pos
           <h3 className="font-semibold">Post Type: {postType}</h3>
           <p className="text-gray-500 text-xs">Posted on {new Date(createdAt).toLocaleString()}</p>
         </div>
-        <MoreHorizontal size={20} className="text-gray-500" />
+        <button className="text-gray-500 hover:text-gray-700">
+          Edit
+        </button>
+        <button className="text-gray-500 hover:text-gray-700" onClick={handlePostDelete}>
+          Delete
+        </button>
+
+        
       </div>
 
       {/* Description */}
@@ -93,8 +165,8 @@ const LikeComment = ({ postId, postType, description, createdAt, contents }: Pos
             <div key={comment.id} className="flex space-x-3 mb-3">
               <div className="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0"></div>
               <div className="bg-gray-100 rounded-lg p-2 flex-1">
-                <p className="font-semibold text-sm">@{comment.username}</p>
-                <p className="text-sm">{comment.text}</p>
+                <p className="font-semibold text-sm">@{comment.username || comment.userName}</p>
+                <p className="text-sm">{comment.content || comment.text}</p>
               </div>
             </div>
           ))}
@@ -108,8 +180,13 @@ const LikeComment = ({ postId, postType, description, createdAt, contents }: Pos
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               onKeyPress={handleKeyPress}
+              disabled={isSubmitting}
             />
-            <button onClick={handleCommentSubmit} className="text-blue-600">
+            <button 
+              onClick={handleCommentSubmit} 
+              className={`text-blue-600 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isSubmitting}
+            >
               <Send size={16} />
             </button>
           </div>
