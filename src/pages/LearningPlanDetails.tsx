@@ -2,65 +2,64 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaEdit, FaTrashAlt, FaBook, FaCalendarAlt, FaLink, FaChevronLeft } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import axiosInstance from '../lib/axiosInstance';
+
+
+interface planInterface {
+  id: number;
+  name: string;
+  tag: string | null;
+  completedCount: number;
+  totalContentCount: number;
+  contents: any[]; // You can replace 'any' with a more specific type if you know what contents contain
+  userId: number;
+  userName: string;
+}
+
 
 const LearningPlanDetails: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // Get the plan id from URL
 
   // Dummy plan details for now
-  const [plan, setPlan] = useState({
-    name: 'Frontend Development',
-    createdAt: '2024-05-01',
-    progress: 30, // Initial progress
-    topics: [
-      {
-        title: 'HTML Basics',
-        description: 'Learn the structure of web pages using HTML.',
-        targetDate: '2024-05-10',
-        resourceLink: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
-        isChecked: false, // Track if the topic is completed
-      },
-      {
-        title: 'CSS Fundamentals',
-        description: 'Style web pages with CSS.',
-        targetDate: '2024-05-15',
-        resourceLink: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
-        isChecked: false, // Track if the topic is completed
-      },
-      {
-        title: 'JavaScript Introduction',
-        description: 'Add interactivity with JavaScript basics.',
-        targetDate: '2024-05-20',
-        resourceLink: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
-        isChecked: false, // Track if the topic is completed
-      },
-    ],
-  });
+  const [plan, setPlan] = useState<planInterface>({});
 
   const [planName, setPlanName] = useState(''); // Your current plan name
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<any>(null);
 
+  useEffect(() => {
+    const fetchPlans = async () => {
+      const response = await axiosInstance.get(`/learning-paths/${id}`);
+      if(response.data){
+        console.log(response.data);
+        setPlan(response.data);
+        setPlanName(response.data?.name);
+      }
+    }
+    fetchPlans();
+  } , [])
   // Update progress whenever the topics state changes
   useEffect(() => {
-    const completedTopics = plan.topics.filter((topic) => topic.isChecked).length;
-    const newProgress = (completedTopics / plan.topics.length) * 100;
+    if (!plan.contents || plan.contents.length === 0)  return;
+    const completedTopics = plan.contents.filter((topic) => topic.isChecked).length;
+    const newProgress = (completedTopics / plan.contents.length) * 100;
     setPlan((prevPlan) => ({
       ...prevPlan,
       progress: newProgress,
     }));
-  }, [plan.topics]);
+  }, [plan.contents]);
 
   const handleBack = () => {
     navigate('/my-learning-journey');
   };
 
   const handleEdit = (index: number) => {
-    setSelectedTopic(plan.topics[index]);
+    setSelectedTopic(plan.contents[index]);
     setIsEditMode(true);
   };
 
-  const handleDelete = (index: number) => {
+  const handleDelete = async (index: number) => {
     Swal.fire({
       title: 'Are you sure?',
       text: 'Do you want to delete this topic?',
@@ -71,11 +70,12 @@ const LearningPlanDetails: React.FC = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        const updatedTopics = plan.topics.filter((_, i) => i !== index);
+        const updatedTopics = plan.contents.filter((_, i) => i !== index);
         setPlan((prevPlan) => ({
           ...prevPlan,
           topics: updatedTopics,
         }));
+        const res = axiosInstance.delete(`/learning-paths/contents/${index}`).then((res) => console.log(res));
         Swal.fire('Deleted!', 'The topic has been deleted.', 'success');
       }
     });
@@ -86,14 +86,14 @@ const LearningPlanDetails: React.FC = () => {
   };
 
   const handleCheckboxChange = (index: number) => {
-    const updatedTopics = [...plan.topics];
+    const updatedTopics = [...plan.contents];
     updatedTopics[index].isChecked = !updatedTopics[index].isChecked;
-    setPlan({ ...plan, topics: updatedTopics });
+    setPlan({ ...plan, contents: updatedTopics });
   };
 
   const handleSaveChanges = () => {
     // Update the topic in the plan's topics list
-    const updatedTopics = plan.topics.map((topic) =>
+    const updatedTopics = plan.contents.map((topic) =>
       topic.title === selectedTopic.title ? selectedTopic : topic
     );
     setPlan((prevPlan) => ({
@@ -189,18 +189,18 @@ const LearningPlanDetails: React.FC = () => {
           <div>
             <h2 className="text-2xl font-bold text-indigo-800 mb-1">{plan.name}</h2>
             <p className="text-gray-500 flex items-center gap-2">
-              <FaCalendarAlt className="text-indigo-400" /> Created on: {plan.createdAt}
+             
             </p>
           </div>
           <div className="bg-indigo-100 px-4 py-2 rounded-full">
-            <span className="font-semibold text-indigo-800">{Math.round(plan.progress)}% Complete</span>
+            <span className="font-semibold text-indigo-800">{Math.round(plan.completedCount)}% Complete</span>
           </div>
         </div>
         
         <div className="w-full bg-gray-200 rounded-full h-4">
           <div
             className="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all duration-700 ease-in-out"
-            style={{ width: `${plan.progress}%` }}
+            style={{ width: `${plan.completedCount}%` }}
           ></div>
         </div>
       </div>
@@ -220,8 +220,8 @@ const LearningPlanDetails: React.FC = () => {
 
       {/* Topics List */}
       <div className="space-y-4">
-        {plan.topics.length > 0 ? (
-          plan.topics.map((topic, index) => (
+        {plan.contents && plan.contents.length ? (
+          plan.contents.map((topic, index) => (
             <div 
               key={index} 
               className="bg-white rounded-xl shadow-md p-5 border-l-4 border-indigo-500 hover:shadow-lg hover:translate-x-1 hover:-translate-y-1 transition-all duration-300"
@@ -244,13 +244,13 @@ const LearningPlanDetails: React.FC = () => {
                 </h3>
                 {/* Edit and Delete Icons */}
                 <div className="ml-auto flex space-x-3">
-                  <button 
+                  {/* <button 
                     onClick={() => handleEdit(index)} 
                     className="text-blue-500 hover:text-blue-700 hover:scale-110 transition-transform duration-300"
                     title="Edit Topic"
                   >
                     <FaEdit size={18} />
-                  </button>
+                  </button> */}
                   <button 
                     onClick={() => handleDelete(index)} 
                     className="text-red-500 hover:text-red-700 hover:scale-110 transition-transform duration-300"

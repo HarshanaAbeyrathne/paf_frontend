@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'; // <-- import SweetAlert2
+import axiosInstance from '../lib/axiosInstance';
+
 
 function CreatePlan() {
   const navigate = useNavigate();
@@ -14,45 +16,29 @@ function CreatePlan() {
       return;
     }
 
-    try {
-      const response = await fetch('http://localhost:8084/api/learning-paths', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: planName,
-          tag: tag ? Number(tag) : null,
-          contents: [],
-        }),
+     try {
+      // Use axiosInstance instead of fetch
+      const response = await axiosInstance.post('/learning-paths', {
+        name: planName,
+        tag: tag ? Number(tag) : null,
+        contents: [],
       });
 
-      if (response.ok) {
-        // Success -> Show SweetAlert
-        await Swal.fire({
-          title: 'Success!',
-          text: 'Learning plan created successfully.',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        });
+      // axios only throws on non-2xx, so if we reach here it's a success
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Learning plan created successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
 
-        // After user clicks OK, navigate
-        navigate('/my-learning-journey');
-      } else {
-        const errorData = await response.json();
-        console.error('Failed to create plan:', errorData);
-        Swal.fire({
-          title: 'Error!',
-          text: 'Failed to create plan. Please try again.',
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
-      }
-    } catch (error) {
-      console.error('Error creating plan:', error);
-      Swal.fire({
+      navigate('/my-learning-journey');
+    } catch (error : any) {
+      console.error('Failed to create plan:', error?.response?.data || error);
+
+      await Swal.fire({
         title: 'Error!',
-        text: 'An error occurred. Please try again.',
+        text: 'Failed to create plan. Please try again.',
         icon: 'error',
         confirmButtonText: 'OK'
       });
