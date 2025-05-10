@@ -65,14 +65,14 @@ const LearningPlanCard: React.FC<LearningPlanProps> = ({ plan }) => {
       </div>
 
       <button
-        onClick={handleViewDetails}
-        className="mt-6 w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 focus:outline-none transition-colors duration-200 flex items-center justify-center text-lg"
-      >
-        <span>View Details</span>
-        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-        </svg>
-      </button>
+  onClick={handleViewDetails}
+  className="mt-6 w-full bg-white text-blue-600 border-2 border-blue-600 px-4 py-3 rounded-lg font-medium hover:bg-blue-50 focus:ring-2 focus:ring-blue-300 focus:outline-none transition-colors duration-200 flex items-center justify-center text-lg"
+>
+  <span>View Details</span>
+  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+  </svg>
+</button>
     </div>
   );
 };

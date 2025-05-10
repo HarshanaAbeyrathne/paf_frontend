@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LearningPlanCard from '../components/LearningPlanCard';
 import Navbar from '../components/NavBar';
+import axiosInstance from '../lib/axiosInstance';
 
 interface LearningPath {
   id: number;
@@ -29,9 +30,10 @@ const MyLearningJourney: React.FC = () => {
     const fetchPlans = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:8084/api/learning-paths');
-        if (response.ok) {
-          const data = await response.json();
+        const response = await axiosInstance.get('/learning-paths');
+        if (response.status === 200) {
+          console.log(response);
+          const data = await response?.data;
           setPlans(data);
         } else {
           console.error('Failed to fetch learning plans');
