@@ -3,9 +3,9 @@ import {
   Home, Search, PlusSquare, Heart, User 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { PostCard } from '../components/PostCard';
 import postService, { Post } from '../services/PostService';
 import Navbar from '../components/NavBar'; // Import the Navbar component
+import LikeComment from '../components/LikeComment'; // Import the LikeComment component
 
 const HomePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'feed' | 'explore'>('feed');
@@ -59,7 +59,6 @@ const HomePage: React.FC = () => {
 
         {/* Main feed */}
         <div className="flex-1 max-w-2xl mx-auto">
-          {/* Create Post Button */}
           <div className="mb-4">
             <button 
               onClick={() => navigate('/create-post')}
@@ -87,49 +86,17 @@ const HomePage: React.FC = () => {
           </div>
 
           {/* Posts */}
-          <div className="space-y-6">
-            {loading && (
-              <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-                <p className="text-gray-500">Loading posts...</p>
-              </div>
-            )}
-            {error && (
-              <div className="bg-white rounded-lg border border-red-200 p-8 text-center">
-                <p className="text-red-500">{error}</p>
-              </div>
-            )}
-            {!loading && !error && posts.length === 0 && (
-              <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-                <p className="text-gray-500">No posts found. Create a new post!</p>
-              </div>
-            )}
-            
-            {
-              !loading && !error && posts.length === 0 && (
-                <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-                  <p className="text-gray-500">No posts found. Create a new post!</p>
-                </div>
-              )
-            }
-              <PostCard
-                key={post.postId}
-                id={post.postId}
-                user={{
-                  name: post.user.userName,
-                  username: post.user.email.split('@')[0],
-                  avatar: post.user.profileImage || '/api/placeholder/40/40'
-                }}
-                content={post.description}
-                image={post.mediaUrls?.[0]}
-                likes={post.likeCount || 0}
-                comments={post.commentCount || 0}
-                timestamp={new Date(post.createdAt).toLocaleString()}
-                isCurrentUserPost={post.userId === currentUserId}
-                onEdit={handleEditPost}
-                onDelete={handleDeletePost}
-              />
-            ))} */}
-          </div>
+          {posts.map(post => (
+  <LikeComment 
+    key={post.postId}
+    postId={post.postId}
+    postType={post.postType}
+    description={post.description}
+    createdAt={post.createdAt}
+    contents={post.contents}
+  />
+))}
+
         </div>
 
         {/* Right sidebar */}

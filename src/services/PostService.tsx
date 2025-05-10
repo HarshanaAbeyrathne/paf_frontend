@@ -1,21 +1,37 @@
 // src/services/postService.ts
 import axiosInstance from "../lib/axiosInstance";
 
+export interface Content {
+  id: number;
+  path: string;
+  contentType: string;
+  tag: string | null;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  duration: number | null;
+}
+
 export interface Post {
   postId: number;
   userId: number;
+  postType: string;
   description: string;
-  mediaUrls?: string[];
   createdAt: string;
+  contents: Content[]; // ✅ Non-optional, always present
+
   user: {
     userId: number;
     userName: string;
     email: string;
     profileImage?: string;
   };
+
+  mediaUrls?: string[];
   commentCount?: number;
   likeCount?: number;
 }
+
 
 export interface PostForm {
   description: string;
