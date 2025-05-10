@@ -111,7 +111,7 @@ const HomePage: React.FC = () => {
                 </div>
               )
             }
-              <PostCard
+              {/* <PostCard
                 key={post.postId}
                 id={post.postId}
                 user={{
@@ -127,8 +127,8 @@ const HomePage: React.FC = () => {
                 isCurrentUserPost={post.userId === currentUserId}
                 onEdit={handleEditPost}
                 onDelete={handleDeletePost}
-              />
-            ))} */}
+              /> */}
+            
           </div>
         </div>
 

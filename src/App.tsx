@@ -9,8 +9,6 @@ import EditPost from './pages/EditPost';
 import SocialPost from "./components/LikeComment";
 // import { NavbarDemo } from './components/NavBar';
 import Message from './pages/Message';
-import CreatePost from './pages/CreatePost';
-import EditPost from './pages/EditPost';
 import MyLearningJourney from './pages/MyLearningJourney';
 import CreatePlan from './pages/CreatePlan';
 import LearningPlanDetails from './pages/LearningPlanDetails'; 
