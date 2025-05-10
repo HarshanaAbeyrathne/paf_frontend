@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
             <Users size={20} />
             <span>Friends</span>
           </a>
-          <a href="/message" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
+          <a href="/chat" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <MessageSquare size={20} />
             <span>Message</span>
           </a>
@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
             <NotebookPen  size={20} />
             <span>Learning Journey</span>
           </a>
-          <a href="#" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
+          <a href="/settings" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100">
             <Settings size={20} />
             <span>Settings</span>
           </a>

@@ -13,6 +13,8 @@ import MyLearningJourney from './pages/MyLearningJourney';
 import CreatePlan from './pages/CreatePlan';
 import LearningPlanDetails from './pages/LearningPlanDetails'; 
 import AddLearningTopic from './pages/AddLearningTopic';
+import UserSettings from "./pages/UserSettings";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -28,8 +30,8 @@ function App() {
         <Route path="/createplan" element={<CreatePlan />} />
         <Route path="/learning-plan/:id" element={<LearningPlanDetails />} />
         <Route path="/learning-plan/:id/add-topic" element={<AddLearningTopic />} />
-
-
+        <Route path="/settings" element={<UserSettings />} />
+        <Route path="/Register" element={<Register />} />
 
 
         {/* Add other routes as needed */}
